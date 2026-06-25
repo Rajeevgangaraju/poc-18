@@ -1,32 +1,45 @@
 name: Full Deploy
-
+ 
 on:
   push:
     branches: [ main ]
-
+ 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+ 
+    defaults:
+      run:
+        working-directory: dev   # ✅ THIS IS IMPORTANT
+ 
     steps:
       - uses: actions/checkout@v3
-
+ 
+      # ✅ Docker build
       - name: Build Docker
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/poc18-app ./app
-
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/poc18-app ../app
+ 
+      # ✅ Docker login
       - name: Login DockerHub
         run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-
+ 
+      # ✅ Push image
       - name: Push Docker
         run: docker push ${{ secrets.DOCKER_USERNAME }}/poc18-app
-
+ 
+      # ✅ Terraform setup
       - uses: hashicorp/setup-terraform@v3
-
+ 
+      # ✅ AWS credentials
       - uses: aws-actions/configure-aws-credentials@v3
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: ap-south-1
-
-      - run: terraform init
-      - run: terraform apply -auto-approve
+ 
+      # ✅ Terraform run
+      - name: Terraform Init
+        run: terraform init
+ 
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
