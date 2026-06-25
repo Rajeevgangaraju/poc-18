@@ -2,6 +2,7 @@ variable "vpc_id" {}
 variable "public_subnets" {}
 variable "private_subnets" {}
 variable "db_endpoint" {}
+variable "image" {}
 
 resource "aws_ecs_cluster" "main" {
   name = "ecs-cluster"
