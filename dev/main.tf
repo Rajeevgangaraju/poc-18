@@ -19,5 +19,5 @@ module "ecs" {
 }
 
 variable "image" {
-  default = "your-dockerhub-username/poc18-app"
+  default = "rajeevgangaraju/poc18-app"
 }
