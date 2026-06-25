@@ -18,7 +18,7 @@ resource "aws_security_group" "db_sg" {
 }
 
 resource "aws_rds_cluster" "aurora" {
-  engine = "aurora-mysql"
+  engine = "aurora-postgresql"
   master_username = "admin"
   master_password = "Pavan@12345"
 
@@ -31,7 +31,7 @@ resource "aws_rds_cluster_instance" "db" {
   count = 2
   cluster_identifier = aws_rds_cluster.aurora.id
   instance_class = "db.t3.medium"
-  engine = "aurora-mysql"
+  engine = "aurora-postgresql"   # ✅ UPDATE THIS
 }
 
 output "endpoint" {
