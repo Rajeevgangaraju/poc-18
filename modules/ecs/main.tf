@@ -59,7 +59,7 @@ resource "aws_ecs_task_definition" "task" {
 resource "aws_ecs_service" "service" {
   name = "ecs-service"   # ✅ ADD THIS
  
-  depends_on = [aws_lb_listener.listener]
+ # depends_on = [aws_lb_listener.listener]
  
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.task.arn
