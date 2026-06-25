@@ -57,22 +57,25 @@ resource "aws_ecs_task_definition" "task" {
 }
 
 resource "aws_ecs_service" "service" {
-  cluster = aws_ecs_cluster.main.id
+  name = "ecs-service"   # ✅ ADD THIS
+ 
+  depends_on = [aws_lb_listener.listener]
+ 
+  cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.task.arn
-  launch_type = "FARGATE"
-  desired_count = 2
-
+  launch_type     = "FARGATE"
+  desired_count   = 2
+ 
   network_configuration {
-    subnets = var.private_subnets
+    subnets         = var.private_subnets
     security_groups = [aws_security_group.ecs_sg.id]
   }
-
+ 
   load_balancer {
     target_group_arn = aws_lb_target_group.tg.arn
-    container_name = "app"
-    container_port = 80
+    container_name   = "app"
+    container_port   = 80
   }
 }
-
 output "ecs_sg" { value = aws_security_group.ecs_sg.id }
 output "alb_dns" { value = aws_lb.alb.dns_name }
