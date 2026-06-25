@@ -1,4 +1,5 @@
 from flask import Flask
+import psycopg2
 import = Flask(__name__)import pymysql
 
 DB_HOST = os.getenv("DB_HOST")
